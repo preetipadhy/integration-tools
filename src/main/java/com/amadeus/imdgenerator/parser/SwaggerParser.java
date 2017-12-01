@@ -20,7 +20,8 @@ import java.util.Set;
 
 public class SwaggerParser {
 
-    private Map<String, Node> definitions = new HashMap<>();
+    private JsonObject definitions = null;
+    private Map<String, Node> definitionNodeMap = new HashMap<>();
 
     public Swagger parse(URL url) throws IOException {
 
@@ -57,7 +58,7 @@ public class SwaggerParser {
                     handlePaths(root.getAsJsonObject(member), swagger);
                     break;
                 case "definitions":
-                    handleDefinitions(root.getAsJsonObject(member));
+                    definitions = root.getAsJsonObject(member);
                     break;
 
             }
@@ -67,24 +68,10 @@ public class SwaggerParser {
 
     }
 
-    private void handleDefinitions(JsonObject definitionObj) {
-
-        Set<String> definitionMembers = definitionObj.keySet();
-
-        for (String member : definitionMembers) {
-            Node node = new Node();
-
-            node.setPath(".");
-
-            definitions.put(member, node);
-
-            handleNodes(definitionObj.getAsJsonObject(member), node);
-
-        }
-
-    }
-
-    private void handleNodes(JsonObject asJsonObject, Node node) {
+    private Node getNodeFromDefinition(JsonObject definitionJsonObject) {
+        Node node = new Node();
+        node.setPath(".");
+        return node;
 
     }
 
